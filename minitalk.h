@@ -33,4 +33,12 @@ int				ft_atoi(const char *str);
 # define CYAN			"\x1b[36m"
 # define RESET			"\x1b[0m"
 
+# define FT_SUCCESS		1
+# define FT_ERROR		-1
+# define FT_EOF			0
+
+void	ft_exit_failure_with_msg(char *message);
+void	send_0(int pid);
+void	send_1(int pid);
+
 #endif
