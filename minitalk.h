@@ -25,6 +25,10 @@ void			ft_putstr_fd(char *s, int fd);
 size_t			ft_strlen(const char *s);
 int				ft_atoi(const char *str);
 
+void	ft_exit_failure_with_msg(char *message);
+void	send_0(int pid);
+void	send_1(int pid);
+
 # define RED			"\x1b[31m"
 # define GREEN			"\x1b[32m"
 # define BLUE			"\x1b[34m"
@@ -36,9 +40,5 @@ int				ft_atoi(const char *str);
 # define FT_SUCCESS		1
 # define FT_ERROR		-1
 # define FT_EOF			0
-
-void	ft_exit_failure_with_msg(char *message);
-void	send_0(int pid);
-void	send_1(int pid);
 
 #endif

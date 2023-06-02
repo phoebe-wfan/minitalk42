@@ -16,8 +16,10 @@ CLIENT = client
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
+SRCS = util.c
 SRCS_SERVER = $(SERVER).c
 SRCS_CLIENT = $(CLIENT).c
+OBJS = $(SRCS:.c=.o)
 OBJS_SERVER = $(SRCS_SERVER:.c=.o)
 OBJS_CLIENT = $(SRCS_CLIENT:.c=.o)
 
@@ -33,12 +35,12 @@ all: $(LIBFT) $(SERVER) $(CLIENT)
 $(LIBFT):
 	@make --silent --directory=$(LIBFT)
 
-$(SERVER): $(OBJS_SERVER) 
-	$(CC) $(CFLAGS) -o $@ $(OBJS_SERVER) $(LIBFT_FLAGS)
+$(SERVER): $(OBJS_SERVER) $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS_SERVER) $(OBJS) $(LIBFT_FLAGS)
 	$(info $(green)<MAKE> SERVER$(reset))
 
-$(CLIENT): $(OBJS_CLIENT) 
-	$(CC) $(CFLAGS) -o $@ $(OBJS_CLIENT) $(LIBFT_FLAGS)
+$(CLIENT): $(OBJS_CLIENT) $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS_CLIENT) $(OBJS) $(LIBFT_FLAGS)
 	$(info $(green)<MAKE> CLIENT$(reset))
 
 %.o: %.c
@@ -48,7 +50,7 @@ $(CLIENT): $(OBJS_CLIENT)
 clean:
 	@make clean --silent --directory=$(LIBFT)
 	$(info $(green)<MAKE> Libft - clean$(reset))
-	@rm -f $(OBJS_SERVER) $(OBJS_CLIENT)
+	@rm -f $(OBJS) $(OBJS_SERVER) $(OBJS_CLIENT)
 	$(info $(green)<MAKE> clean$(reset))
 
 fclean: clean

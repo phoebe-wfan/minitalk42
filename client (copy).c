@@ -38,16 +38,16 @@ static void	mt_kill(int pid, char *str)
 		while (i--)
 		{
 			if (c >> i & 1)
-				send_1(pid);
+				kill(pid, SIGUSR2);
 			else
-				send_0(pid);
+				kill(pid, SIGUSR1);
 			usleep(100);
 		}
 	}
 	i = 8;
 	while (i--)
 	{
-		send_0(pid);
+		kill(pid, SIGUSR1);
 		usleep(100);
 	}
 }
