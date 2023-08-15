@@ -12,6 +12,40 @@
 
 #include "minitalk.h"
 
+/*void	ft_exit_failure_with_msg(char *message)
+{
+	ft_putstr_fd(RED, 2);
+	ft_putstr_fd("<ERROR> ", 2);
+	ft_putstr_fd(message, 2);
+	ft_putstr_fd("\n", 2);
+	ft_putstr_fd(RESET, 2);
+	exit(EXIT_FAILURE);
+}*/
+
+void	send_0(int pid)
+{
+	if (kill(pid, SIGUSR1) == FT_ERROR)
+	{
+		ft_putstr_fd(RED, 2);
+		ft_putstr_fd("<ERROR> ", 2);
+		ft_putstr_fd("Signal(SIGUSR1) transmission failed.\n", 2);
+		ft_putstr_fd(RESET, 2);
+		exit(EXIT_FAILURE);
+	}	
+}
+
+void	send_1(int pid)
+{
+	if (kill(pid, SIGUSR2) == FT_ERROR)
+	{
+		ft_putstr_fd(RED, 2);
+		ft_putstr_fd("<ERROR> ", 2);
+		ft_putstr_fd("Signal(SIGUSR2) transmission failed.\n", 2);
+		ft_putstr_fd(RESET, 2);
+		exit(EXIT_FAILURE);
+	}	
+}
+
 static void	action(int sig)
 {
 	static int	received = 0;
