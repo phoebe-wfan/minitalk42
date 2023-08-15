@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "minitalk.h"
-# include <signal.h>
 
 static void	action(int sig, siginfo_t *info, void *context)
 {
