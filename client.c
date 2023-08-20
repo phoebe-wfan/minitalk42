@@ -18,7 +18,7 @@ void	send_0(int pid)
 	{
 		ft_putstr_fd(RED, 2);
 		ft_putstr_fd("<ERROR> ", 2);
-		ft_putstr_fd("Signal(SIGUSR1) transmission failed.\n", 2);
+		ft_putstr_fd("Signal(SIGUSR1) failed.\n", 2);
 		ft_putstr_fd(RESET, 2);
 		exit(EXIT_FAILURE);
 	}	
@@ -30,7 +30,7 @@ void	send_1(int pid)
 	{
 		ft_putstr_fd(RED, 2);
 		ft_putstr_fd("<ERROR> ", 2);
-		ft_putstr_fd("Signal(SIGUSR2) transmission failed.\n", 2);
+		ft_putstr_fd("Signal(SIGUSR2) failed.\n", 2);
 		ft_putstr_fd(RESET, 2);
 		exit(EXIT_FAILURE);
 	}	
@@ -80,10 +80,10 @@ int	main(int argc, char **argv)
 {
 	if (argc != 3 || !ft_strlen(argv[2]))
 		return (1);
-	ft_putstr_fd("Sent    : ", 1);
+	ft_putstr_fd("envoye: ", 1);
 	ft_putnbr_fd(ft_strlen(argv[2]), 1);
 	ft_putchar_fd('\n', 1);
-	ft_putstr_fd("Received: ", 1);
+	ft_putstr_fd("recu  : ", 1);
 	signal(SIGUSR1, action);
 	signal(SIGUSR2, action);
 	mt_kill(ft_atoi(argv[1]), argv[2]);
