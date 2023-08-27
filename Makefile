@@ -22,8 +22,6 @@ reset:=$(shell tput sgr0)
 
 all: server client
 
-bonus: server client
-
 server: server.o libft
 	$(CC) -o $@ $< -Llibft -lft
 	$(info $(green)<MAKE> SERVER$(reset))

@@ -6,88 +6,52 @@
 /*   By: wfan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 14:47:12 by wfan              #+#    #+#             */
-/*   Updated: 2023/06/02 14:47:16 by wfan             ###   ########.fr       */
+/*   Updated: 2023/08/27 18:39:00 by wfan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-void	send_0(int pid)
+void	ft_send_bits(int pid, char i)
 {
-	if (kill(pid, SIGUSR1) == FT_ERROR)
-	{
-		ft_putstr_fd(RED, 2);
-		ft_putstr_fd("<ERROR> ", 2);
-		ft_putstr_fd("Signal(SIGUSR1) failed.\n", 2);
-		ft_putstr_fd(RESET, 2);
-		exit(EXIT_FAILURE);
-	}	
-}
+	int	bit;
 
-void	send_1(int pid)
-{
-	if (kill(pid, SIGUSR2) == FT_ERROR)
+	bit = 0;
+	while (bit < 8)
 	{
-		ft_putstr_fd(RED, 2);
-		ft_putstr_fd("<ERROR> ", 2);
-		ft_putstr_fd("Signal(SIGUSR2) failed.\n", 2);
-		ft_putstr_fd(RESET, 2);
-		exit(EXIT_FAILURE);
-	}	
-}
-
-static void	action(int sig)
-{
-	static int	received = 0;
-
-	if (sig == SIGUSR1)
-		++received;
-	else
-	{
-		ft_putnbr_fd(received, 1);
-		ft_putchar_fd('\n', 1);
-		exit(0);
-	}
-}
-
-static void	mt_kill(int pid, char *str)
-{
-	int		i;
-	char	c;
-
-	while (*str)
-	{
-		i = 8;
-		c = *str++;
-		while (i--)
-		{
-			if (c >> i & 1)
-				send_1(pid);
-			else
-				send_0(pid);
-			usleep(100);
-		}
-	}
-	i = 8;
-	while (i--)
-	{
-		send_0(pid);
-		usleep(100);
+		if ((i & (0x01 << bit)) != 0)
+			kill(pid, SIGUSR1);
+		else
+			kill(pid, SIGUSR2);
+		usleep(420);
+		bit++;
 	}
 }
 
 int	main(int argc, char **argv)
 {
-	if (argc != 3 || !ft_strlen(argv[2]))
+	int	pid;
+	int	i;
+
+	i = 0;
+	if (argc == 3)
+	{
+		pid = ft_atoi(argv[1]);
+		ft_putstr_fd("sent: ", 1);
+		ft_putnbr_fd(ft_strlen(argv[2]), 1);
+		ft_putstr_fd("\n", 1);
+		while (argv[2][i] != '\0')
+		{
+			ft_send_bits(pid, argv[2][i]);
+			i++;
+		}
+		ft_send_bits(pid, '\n');
+	}
+	else
+	{
+		ft_putstr_fd("Error: wrong format\n", 2);
+		ft_putstr_fd("Try: ./client <PID> <MESSAGE> \n", 2);
 		return (1);
-	ft_putstr_fd("envoye: ", 1);
-	ft_putnbr_fd(ft_strlen(argv[2]), 1);
-	ft_putchar_fd('\n', 1);
-	ft_putstr_fd("recu  : ", 1);
-	signal(SIGUSR1, action);
-	signal(SIGUSR2, action);
-	mt_kill(ft_atoi(argv[1]), argv[2]);
-	while (1)
-		pause();
+	}
 	return (0);
 }

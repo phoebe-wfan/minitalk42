@@ -6,52 +6,46 @@
 /*   By: wfan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 14:47:00 by wfan              #+#    #+#             */
-/*   Updated: 2023/06/02 14:47:03 by wfan             ###   ########.fr       */
+/*   Updated: 2023/08/27 18:38:18 by wfan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-static void	action(int sig, siginfo_t *info, void *context)
+void	ft_handler(int signal)
 {
-	static int				i = 0;
-	static pid_t			client_pid = 0;
-	static unsigned char	c = 0;
+	static int	bit;
+	static int	i;
 
-	(void)context;
-	if (!client_pid)
-		client_pid = info->si_pid;
-	c |= (sig == SIGUSR2);
-	if (++i == 8)
+	if (signal == SIGUSR1)
+		i |= (0x01 << bit);
+	bit++;
+	if (bit == 8)
 	{
+		ft_putchar_fd(i, 1);
+		bit = 0;
 		i = 0;
-		if (!c)
-		{
-			ft_putchar_fd('\n', 1);
-			kill(client_pid, SIGUSR2);
-			client_pid = 0;
-			return ;
-		}
-		ft_putchar_fd(c, 1);
-		c = 0;
-		kill(client_pid, SIGUSR1);
 	}
-	else
-		c <<= 1;
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
-	struct sigaction	s_sigaction;
-
+	(void)argv;
+	if (argc != 1)
+	{
+		ft_putstr_fd("Error: wrong format\n", 2);
+		ft_putstr_fd("Try: ./server \n", 2);
+		return (0);
+	}
 	ft_putstr_fd("Server PID: ", 1);
 	ft_putnbr_fd(getpid(), 1);
 	ft_putchar_fd('\n', 1);
-	s_sigaction.sa_sigaction = action;
-	s_sigaction.sa_flags = SA_SIGINFO;
-	sigaction(SIGUSR1, &s_sigaction, 0);
-	sigaction(SIGUSR2, &s_sigaction, 0);
-	while (1)
-		pause();
+	ft_putstr_fd("Waiting... \n", 1);
+	while (argc == 1)
+	{
+		signal(SIGUSR1, ft_handler);
+		signal(SIGUSR2, ft_handler);
+		pause ();
+	}
 	return (0);
 }
